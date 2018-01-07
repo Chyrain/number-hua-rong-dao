@@ -1,0 +1,258 @@
+﻿<!doctype html>
+<html>
+	<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>图标(<%= fontName %>)</title>
+		<style>
+      body {
+        padding: 1em 1em 5em;
+        color: #20acd5;
+      }
+      h1 {
+        color:  #333;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 30px;
+      }
+      /* 预览 */
+      .preview {
+        overflow: hidden;
+        color: #555;
+      }
+      .icon-large {
+        padding: 0 .5em;
+        border: 1px solid #eee;
+        float: left;
+        margin-right: .5em;
+      }
+      .icon-large .icon {
+        font-size: 150px;
+      }
+      .icon-analyze {
+        overflow: hidden;
+        padding: 1%;
+        border: 1px solid #eee;
+        font-size: 40px;
+      }
+      .icon-analyze.fg .icon {
+        color: #00ABFF;
+      }
+      .icon-analyze.bg .icon {
+        color: white;
+        background-color: #00ABFF;
+      }
+      .icon-item {
+        padding: .1em;
+        margin: .1em 1%;
+        float: left;
+        width: 31.33%;
+        background-color: #efefef;
+        box-sizing: border-box;
+      }
+      .icon-config {
+        overflow: hidden;
+        border: 1px solid #eee;
+        margin-top: .5em;
+      }
+      .icon-config div {
+        padding: .5em;
+      }
+      .percent {
+        width: 5em;
+        text-align: center;
+      }
+      /* 列表 */
+      .items {
+        overflow: hidden
+      }
+      .item {
+        float: left;
+        width: 14em;
+        padding: .5em;
+        cursor: pointer;
+      }
+      .item:hover {
+        background-color: rgba(0,0,0,.1);
+      }
+      /* 源码 */
+      .usage {
+        color: #2795A7;
+        padding: 1em 2em;
+        text-decoration: none;
+      }
+      /* 图标 */
+      .icon {
+        font-weight: normal;
+        font-style: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .icon:before {
+        display: inline;
+        speak: none;
+        text-align: center;
+        font-variant: normal;
+      }
+      /* 动态 */
+      @font-face {
+        font-family: "<%= fontName %>";
+        src: url("<%= fontName %>.eot");
+        font-weight: normal;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "<%= fontName %>";
+        src: url("<%= fontName %>.eot");
+        src: url("<%= fontName %>.woff") format("woff"),
+          url("<%= fontName %>.eot?#iefix") format("embedded-opentype"),
+          url("<%= fontName %>.woff2") format("woff2"),
+          url("<%= fontName %>.ttf") format("truetype"),
+          url("<%= fontName %>.svg#bs") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      .<%= className %> {
+        font-family: "<%= fontName %>";
+      }
+      [class^="<%= className %>-"]:before,
+      [class*=" <%= className %>-"]:before {
+        font-family: "<%= fontName %>";
+      }
+      <% _.each(glyphs, function(glyph) { %>
+      .<%= className %>-<%= glyph.name %>::before { content: "\<%= glyph.unicode[0].toString(16).toUpperCase() %>"; }<% }); %>
+		</style>
+	</head>
+	<body>
+    <h1>预览 .<%= className %>-<span id="iconName">standard</span> <span id="iconCode">&amp;#xE001;</span></h1>
+    <div class="preview" id="preview">
+      <div class="icon-large">
+        <i class="icon <%= className %>" id="iconLarge">&#xE001;</i>
+      </div>
+      <div class="icon-analyze" id="iconAnalyze">
+        图标<i class="icon <%= className %>">&#xE001;</i>在中文字符中间。
+        Icon<i class="icon <%= className %>">&#xE001;</i>in words.
+        1234<i class="icon <%= className %>">&#xE001;</i>7894578985
+        <br/>
+        <i class="icon <%= className %>">&#xE001;</i>你好
+        <i class="icon <%= className %>">&#xE001;</i>abcd
+        <i class="icon <%= className %>">&#xE001;</i>lmnopq
+        <i class="icon <%= className %>">&#xE001;</i>ABC
+      </div>
+      <div class="icon-config">
+        <div>
+          <label><input type="radio" name="decoration" checked value="none"/>无线</label>
+          <label><input type="radio" name="decoration" value="underline"/>基线</label>
+          <label><input type="radio" name="decoration" value="line-through"/>中线</label>
+          <label><input type="radio" name="decoration" value="overline"/>顶线</label>
+        </div>
+        <div>
+          <label><input type="radio" name="color" checked value="none"/>同环境</label>
+          <label><input type="radio" name="color" value="fg"/>前景色</label>
+          <label><input type="radio" name="color" value="bg"/>背景色</label>
+        </div>
+        <div>
+          <label><input type="radio" name="align" checked value="baseline"/>基线对齐</label>
+          <label><input type="radio" name="align" value="middle"/>居中对齐</label>
+          <label><input type="radio" name="align" value="top"/>顶部对齐</label>
+          <label><input type="radio" name="align" value="bottom"/>底部对齐</label>
+          <label><input type="radio" name="align" id="perc" value="percent"/>按 <input class="percent" id="percent" type="text" value="0"/> % 对齐</label>
+        </div>
+      </div>
+    </div>
+		<h1>列表</h1>
+		<div class="items" id="iconList"><% _.each(glyphs, function(glyph) { %>
+			<div class="item" iconName="<%= glyph.name %>" iconCode="<%= glyph.unicode[0].charCodeAt(0).toString(16).toUpperCase() %>">
+        <i class="icon <%= className %>" ic-class="<%= className %>-<%= glyph.name %>"><%= glyph.unicode[0].toString(16).toUpperCase() %></i>
+        <%= glyph.name %> "&amp;#x<%= glyph.unicode[0].charCodeAt(0).toString(16).toUpperCase() %>;"
+      </div><% }); %>
+		</div>
+		<h1>使用</h1>
+    <div>
+      <a class="usage" href="./<%= fontName %>.scss"><%= fontName %>.scss</a>
+      <a class="usage" href="./<%= fontName %>.styl"><%= fontName %>.styl</a>
+      <a class="usage" href="./<%= fontName %>.css"><%= fontName %>.css</a>
+      <a class="usage" href="./<%= fontName %>.json"><%= fontName %>.json</a>
+    </div>
+    <script type="text/javascript">
+      var inputs = document.getElementsByTagName("input"),
+        iconAnalyze = document.getElementById("iconAnalyze"),
+        percent = document.getElementById("percent"),
+        perc = document.getElementById("perc"),
+        iconLarge = document.getElementById("iconLarge"),
+        currName = document.getElementById("iconName"),
+        currCode = document.getElementById("iconCode"),
+        iconItems = iconAnalyze.getElementsByClassName("icon");
+      // 
+      function getIcon(e) {
+        var target = e.target || e.srcElement;
+        if (/\bitem\b/.test(target.className)) {
+          var iconName = target.getAttribute("iconName"),
+            iconCode = target.getAttribute("iconCode");
+          iconLarge.innerHTML = '&#x' + iconCode + ';';
+          currName.innerHTML = iconName;
+          currCode.innerHTML = '&amp;#x' + iconCode + ';'
+          if (iconName && iconCode && iconAnalyze) {
+            var i = iconItems.length;
+            while (i--) {
+              var iconItem = iconItems[i];
+              iconItem.innerHTML = '&#x' + iconCode + ';';
+            }
+          }
+        }
+      }
+      // 
+      document.getElementById('iconList').onclick = getIcon;
+      getIcon({target: document.getElementsByClassName('item')[0]});
+      // 
+      for (var i = inputs.length - 1; i >= 0; i--) {
+        inputs[i].onchange = config;
+      }
+      function config(e) {
+        if (/decoration/.test(this.name)) {
+          if (this.checked) {
+            iconAnalyze.style.textDecoration = this.value;
+          }
+        } else if (/color/.test(this.name)) {
+          if (this.checked) {
+            iconAnalyze.className = "icon-analyze " + this.value;
+          }
+        } else if (/align/.test(this.name)) {
+          if (this.checked) {
+            var val = this.value;
+            val === "percent" && (val = percent.value + '%');
+            val === "underline" && (val = "");
+            var i = iconItems.length;
+            while (i--) {
+              var iconItem = iconItems[i];
+              iconItem.style.verticalAlign = val;
+            }
+          }
+        }
+      }
+      // 
+      percent.onfocus = function() {
+        perc.checked = true;
+        config({target: perc});
+      }
+      percent.onchange = function(e) {
+        var i = iconItems.length;
+        while (i--) {
+          var iconItem = iconItems[i];
+          iconItem.style.verticalAlign = this.value + '%';
+        }
+      }
+      percent.onkeydown = function(e) {
+        var dir = e.keyCode === 40 ? -1 : (e.keyCode === 38 ? 1 : void 0);
+        if (dir) {
+          e.preventDefault();
+          this.value = parseInt(this.value) + dir;
+          var i = iconItems.length;
+          while (i--) {
+            var iconItem = iconItems[i];
+            iconItem.style.verticalAlign = this.value + '%';
+          }
+        }
+      }
+    </script>
+	</body>
+</html>

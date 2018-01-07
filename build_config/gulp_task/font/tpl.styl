@@ -1,0 +1,128 @@
+@font-face 
+	font-family "<%= fontName %>"
+	src url("<%= fontRefer %>/<%= fontName %>.eot")
+	src url("<%= fontRefer %>/<%= fontName %>.eot?#iefix") format("embedded-opentype"),
+		url("<%= fontRefer %>/<%= fontName %>.woff2") format("woff2"),
+		url("<%= fontRefer %>/<%= fontName %>.woff") format("woff"),
+		url("<%= fontRefer %>/<%= fontName %>.ttf") format("truetype"),
+		url("<%= fontRefer %>/<%= fontName %>.svg#<%= fontName %>") format("svg")
+
+[class^="<%= className %>-"],
+[class*=" <%= className %>-"]
+	font-family: "<%= fontName %>";
+	display: inline-block;
+	width: auto;
+	height: auto;
+	font-size: inherit;
+	font-weight: normal;
+	font-style: normal;
+	line-height: normal;
+    text-decoration: inherit;
+	text-rendering: auto;
+	// text-transform: translate(0, 0);
+	vertical-align: baseline;
+	background-image: none;
+	background-position: 0 0;
+	background-repeat: repeat;
+	margin-top: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	&:before
+		// width: 1.0714em;
+		// vertical-align: -4%;
+		// speak: none;
+		// text-align: center;
+		// font-variant: normal;
+		// line-height: 1em;
+		text-decoration: inherit;
+		display: inline-block;
+		speak: none;
+
+/.<%= className %>-font-bg // 透明字 使用覆盖图片
+	background-size cover
+	background-position center
+	background-repeat no-repeat
+	border-radius 10em
+	color transparent !important
+	&:before
+		color transparent !important
+
+// 扩展图标样式
+@keyframes spin{
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(359deg);
+	}
+}
+
+[class^="<%= className %>-"],
+[class*=" <%= className %>-"] {
+	&.icon-spin {
+		animation: spin 2s infinite linear;
+	}
+	&.icon-pulse {
+		animation: spin 1s infinite steps(8);
+	}
+	&.icon-pulse-4 {
+		animation: spin 1s infinite steps(4);
+	}
+	&.icon-pull-left {
+		margin-right: .3em;
+	}
+	&.icon-pull-right {
+		margin-left: .3em;
+	}
+}
+.icon-pull-left {
+	float: left;
+}
+.icon-pull-right {
+	float: right;
+}
+.icon-large {
+	&:before {
+		vertical-align: -10%;
+		font-size: 1.3333333333333333em;
+	}
+}
+.icon-2x {
+	font-size: 2em;
+}
+.icon-3x {
+	font-size: 3em;
+}
+.icon-4x {
+	font-size: 4em;
+}
+.icon-border {
+	border: solid 1px #eee;
+	padding: .2em .25em .15em;
+	border-radius: 3px;
+	&.icon-4x {
+		border-width: 4px;
+		border-radius: 6px;
+	}
+	&.icon-3x {
+		border-width: 3px;
+		border-radius: 5px;
+	}
+	&.icon-2x {
+		border-width: 2px;
+		border-radius: 4px;
+	}
+}
+.icon-muted {
+	color: #eee;
+}
+
+// IconFonts
+iconfonts = {<% _.each(glyphs, function(glyph) { %>
+	<%= glyph.name %>: "\<%= glyph.unicode['0'].charCodeAt(0).toString(16).toUpperCase() %>",<% }); %>
+}
+
+for name, code in iconfonts
+	.<%= className %>-{name}
+		&::before
+			content: code

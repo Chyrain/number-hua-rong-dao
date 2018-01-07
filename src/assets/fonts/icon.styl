@@ -1,0 +1,130 @@
+@font-face 
+	font-family "icon"
+	src url("../assets/fonts/icon.eot")
+	src url("../assets/fonts/icon.eot?#iefix") format("embedded-opentype"),
+		url("../assets/fonts/icon.woff2") format("woff2"),
+		url("../assets/fonts/icon.woff") format("woff"),
+		url("../assets/fonts/icon.ttf") format("truetype"),
+		url("../assets/fonts/icon.svg#icon") format("svg")
+
+[class^="icon-"],
+[class*=" icon-"]
+	font-family: "icon";
+	display: inline-block;
+	width: auto;
+	height: auto;
+	font-size: inherit;
+	font-weight: normal;
+	font-style: normal;
+	line-height: normal;
+    text-decoration: inherit;
+	text-rendering: auto;
+	// text-transform: translate(0, 0);
+	vertical-align: baseline;
+	background-image: none;
+	background-position: 0 0;
+	background-repeat: repeat;
+	margin-top: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	&:before
+		// width: 1.0714em;
+		// vertical-align: -4%;
+		// speak: none;
+		// text-align: center;
+		// font-variant: normal;
+		// line-height: 1em;
+		text-decoration: inherit;
+		display: inline-block;
+		speak: none;
+
+/.icon-font-bg // 透明字 使用覆盖图片
+	background-size cover
+	background-position center
+	background-repeat no-repeat
+	border-radius 10em
+	color transparent !important
+	&:before
+		color transparent !important
+
+// 扩展图标样式
+@keyframes spin{
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(359deg);
+	}
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+	&.icon-spin {
+		animation: spin 2s infinite linear;
+	}
+	&.icon-pulse {
+		animation: spin 1s infinite steps(8);
+	}
+	&.icon-pulse-4 {
+		animation: spin 1s infinite steps(4);
+	}
+	&.icon-pull-left {
+		margin-right: .3em;
+	}
+	&.icon-pull-right {
+		margin-left: .3em;
+	}
+}
+.icon-pull-left {
+	float: left;
+}
+.icon-pull-right {
+	float: right;
+}
+.icon-large {
+	&:before {
+		vertical-align: -10%;
+		font-size: 1.3333333333333333em;
+	}
+}
+.icon-2x {
+	font-size: 2em;
+}
+.icon-3x {
+	font-size: 3em;
+}
+.icon-4x {
+	font-size: 4em;
+}
+.icon-border {
+	border: solid 1px #eee;
+	padding: .2em .25em .15em;
+	border-radius: 3px;
+	&.icon-4x {
+		border-width: 4px;
+		border-radius: 6px;
+	}
+	&.icon-3x {
+		border-width: 3px;
+		border-radius: 5px;
+	}
+	&.icon-2x {
+		border-width: 2px;
+		border-radius: 4px;
+	}
+}
+.icon-muted {
+	color: #eee;
+}
+
+// IconFonts
+iconfonts = {
+	redo: "\E80A",
+	pause: "\E80B",
+	start: "\E80C",
+}
+
+for name, code in iconfonts
+	.icon-{name}
+		&::before
+			content: code
