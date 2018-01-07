@@ -6,6 +6,8 @@
 
 移动滑块，直到数字按顺序1-15排列
 
+[Demo](http://chyrain.github.io/games/huarongdao/)
+
 ## init
 
 Run this to init project.
