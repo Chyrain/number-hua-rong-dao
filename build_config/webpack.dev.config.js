@@ -41,13 +41,13 @@ module.exports = merge(config(env), {
       dll: `./lib/${manifest.name}.js`
     }),
     new OpenBrowserPlugin({
-      url: "http://localhost:8080"
+      url: "http://localhost:8000"
     })
     // --hot 重复
     // new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
-    port: 8080,
+    port: 8000,
     historyApiFallback: true,
     noInfo: true,
     contentBase: BUILD_PATH

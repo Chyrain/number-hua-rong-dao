@@ -31,13 +31,34 @@ document.body.ontouchmove = function(e) {
     }
   }
 };
-document.addEventListener(
-  "touchmove",
-  function(e) {
-    e.preventDefault();
-  },
-  false
-);
+document.body.ontouchstart = function(e) {
+  console.log("ontouchstart", e, e.target);
+  if (e.target == document.body) {
+    // e.preventDefault();
+    // 判断默认行为是否可以被禁用
+    if (event.cancelable) {
+      // 判断默认行为是否已经被禁用
+      if (!event.defaultPrevented) {
+        event.preventDefault();
+      }
+    }
+  }
+};
+
+// document.addEventListener(
+//   "touchmove",
+//   function(e) {
+//     // e.preventDefault();
+//     // 判断默认行为是否可以被禁用
+//     if (event.cancelable) {
+//       // 判断默认行为是否已经被禁用
+//       if (!event.defaultPrevented) {
+//         event.preventDefault();
+//       }
+//     }
+//   },
+//   false
+// );
 // document.addEventListener(
 //   "touchstart",
 //   function(e) {

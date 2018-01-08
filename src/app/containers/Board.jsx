@@ -37,7 +37,6 @@ class Board extends React.Component {
     this.clickRestart = this.clickRestart.bind(this);
     this.clickStart = this.clickStart.bind(this);
     this.clickPause = this.clickPause.bind(this);
-    this.onSwiped = this.onSwiped.bind(this);
     this.onSwiping = this.onSwiping.bind(this);
   }
 
@@ -110,23 +109,68 @@ class Board extends React.Component {
   }
 
   onSwiping(e, deltaX, deltaY, absX, absY, velocity) {
-    var move = { x: 0, y: 0 };
-    if (absY >= 30) {
+    if (e.target.title == 0 || this.moving) {
+      return;
+    }
+    var move = { x: 0, y: 0 },
+      index = e.target.id;
+    if (absY >= 30 || (absY >= 10 && velocity > 0.3)) {
       move.y = deltaY > 0 ? -1 : 1;
     }
-    if (absX >= 30) {
+    if (absX >= 30 || (absX >= 10 && velocity > 0.3)) {
       move.x = deltaX > 0 ? -1 : 1;
     }
-    console.log("You Swiping...", move, e.target.id, e, {
-      deltaX,
-      deltaY,
-      absX,
-      absY,
-      velocity
-    });
+    // console.log("You Swiping...", 
+    //   // move, e, 
+    //   {
+    //     index: index,
+    //     title: e.target.title,
+    //     speed: velocity > 0.3,
+    //     deltaX,
+    //     deltaY,
+    //     absX,
+    //     absY,
+    //     velocity
+    //   }
+    // );
     const emptyId = this.props.squares.empty;
-    if ((move.x || move.y) && canMove(e.target.id, move, emptyId)) {
-      this.props.moveSquare(e.target.id, emptyId);
+    if (move.x || move.y) {
+      var direction = canMove(index, move, emptyId);
+      if (direction) {
+        this.moving = true;
+        var st = direction == 1 ? '上' : (direction == 2 ? '右' : (direction == 3 ? '下' : '左'));
+        var origin = 0, element = this["square" + e.target.title].element;
+        switch (direction) {
+          case 1: // 上
+            origin = parseInt(element.style.top);
+            element.style.top =
+            parseFloat(origin - this.slen) + "px";
+            break;
+          case 2: // 右
+            origin = parseInt(element.style.left);
+            element.style.left =
+              parseFloat(origin + this.slen) + "px";
+            break;
+          case 3: // 下
+            origin = parseInt(element.style.top);
+            element.style.top =
+            parseFloat(origin + this.slen) + "px";
+            break;
+          case 4: // 左
+            origin = parseInt(element.style.left);
+            element.style.left =
+            parseFloat(origin - this.slen) + "px";
+            break;
+        }
+        console.log("移动方向", st, origin, "square" + e.target.title, index, move); //////
+        // 先执行动画，而后渲染
+        setTimeout(() => {
+          this.props.moveSquare(index, emptyId);
+          this.moving = false;
+        }, 95);
+      } else {
+        console.log("不动", index, move); //////
+      }
     }
     // e.preventDefault();
     // 判断默认行为是否可以被禁用[新版chrome取消preventDefault]
@@ -139,11 +183,23 @@ class Board extends React.Component {
     e.stopPropagation();
   }
 
+  getLeft(index, width) {
+    var x = index % 4;
+    return 4 + x * width;
+  }
+
+  getTop(index, width) {
+    var y = parseInt(index / 4);
+    return 4 + y * width;
+  }
+
   render() {
     const { current, squares } = this.props;
     var width = (window.document.body.clientWidth - 48) / 4,
       time = formatTime(this.state.timer);
     width > 150 && (width = 150);
+    this.slen = width; // 边长
+    console.log("render", current, squares); //////
     return (
       <div
         className="board"
@@ -159,24 +215,44 @@ class Board extends React.Component {
             <i className="icon-pause" onClick={this.clickPause} />
           </div>
         </div>
-        <div className="chess-square">
-          {squares.map((item, i) => (
-            <Swipeable
-              key={item.num}
-              onSwiped={this.onSwiped}
-              onSwiping={this.onSwiping}
-              onSwipingLeft={this.swipingLeft}
-              onSwipedUp={this.swipedRight}
-              className="pieces"
-              style={{
-                width: width + "px",
-                height: width + "px",
-                lineHeight: width + "px"
-              }}
-            >
-              <Square index={i} num={item.num} position={item.position} />
-            </Swipeable>
-          ))}
+        <div
+          className="chess-square"
+          style={{
+            width: width * 4 + 8 + "px",
+            height: width * 4 + 8 + "px"
+          }}
+        >
+          {squares.map(
+            (item, i) =>
+              item.num > 0 ? (
+                <Swipeable
+                  key={item.num}
+                  id={"square" + item.num}
+                  ref={el => (this["square" + item.num] = el)}
+                  onSwiped={this.onSwiped}
+                  onSwiping={this.onSwiping}
+                  onSwipingLeft={this.swipingLeft}
+                  onSwipedUp={this.swipedRight}
+                  className="pieces"
+                  style={{
+                    width: width + "px",
+                    height: width + "px",
+                    lineHeight: width + "px",
+                    left: this.getLeft(i, width) + "px",
+                    top: this.getTop(i, width) + "px"
+                  }}
+                >
+                  <Square
+                    index={i}
+                    data-num={item.num}
+                    num={item.num}
+                    position={item.position}
+                  />
+                </Swipeable>
+              ) : (
+                false
+              )
+          )}
         </div>
         {this.state.start ? (
           <div className="mask">
@@ -184,29 +260,31 @@ class Board extends React.Component {
               开始
             </div>
           </div>
-        ) : (this.state.pause ? (
+        ) : this.state.pause ? (
           <div className="mask">
             <div className="btns-mask">
               <i className="icon-start" onClick={this.clickStart} />
               <i className="icon-redo" onClick={this.clickRestart} />
             </div>
           </div>
-        ) : (this.state.success && (
-          <div className="mask">
-            <span
-              style={{
-                position: "relative",
-                top: "30%",
-                fontSize: '30px'
-              }}
-            >
-              恭喜你完成啦~
-            </span>
-            <div className="btn-start" onClick={this.clickRestart}>
-              再玩一局
+        ) : (
+          this.state.success && (
+            <div className="mask">
+              <span
+                style={{
+                  position: "relative",
+                  top: "30%",
+                  fontSize: "30px"
+                }}
+              >
+                恭喜你完成啦~
+              </span>
+              <div className="btn-start" onClick={this.clickRestart}>
+                再玩一局
+              </div>
             </div>
-          </div>
-        )))}
+          )
+        )}
       </div>
     );
   }

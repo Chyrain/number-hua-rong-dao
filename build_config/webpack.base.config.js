@@ -41,7 +41,6 @@ module.exports.config = env => {
       // 	// path.resolve(LIB_PATH, 'md5.js'), // 打包进dll
       // 	path.resolve(LIB_PATH, 'jqlite.js')
       // ],
-
       app: path.resolve(APP_PATH, "index.js")
     },
     output: {

@@ -55,13 +55,12 @@ function getInitialState(level) {
 
 function canMove(id, move, emptyId) {
   const { x, y } = { x: id % 4, y: Math.floor(id / 4) };
-  if (
-    (x + move.x === emptyId % 4 && y === Math.floor(emptyId / 4)) ||
-    (x === emptyId % 4 && y + move.y === Math.floor(emptyId / 4))
-  ) {
-    return true;
+  if (x + move.x === emptyId % 4 && y === Math.floor(emptyId / 4)) {
+    return move.x > 0 ? 2 : 4;
+  } else if (x === emptyId % 4 && y + move.y === Math.floor(emptyId / 4)) {
+    return move.y > 0 ? 3 : 1;
   }
-  return false;
+  return 0;
 }
 
 function checkWin(data) {
