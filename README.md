@@ -6,7 +6,8 @@
 
 移动滑块，直到数字按顺序1-15排列
 
-[Demo](http://chyrain.github.io/games/huarongdao/)
+[Demo](http://chyrain.github.io/games/huarongdao/) （仅支持手机）
+![二维码](./qrcode)
 
 ## init
 

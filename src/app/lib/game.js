@@ -63,7 +63,7 @@ function canMove(id, move, emptyId) {
   return 0;
 }
 
-function checkWin(data) {
+function checkSuccess(data) {
   if (data.empty !== 15) {
     return false;
   } else {
@@ -86,4 +86,4 @@ function formatTime(second) {
         .replace(/\b(\d)\b/g, "0$1");
 }
 
-export { getInitialState, canMove, checkWin, formatTime };
+export { getInitialState, canMove, checkSuccess, formatTime };

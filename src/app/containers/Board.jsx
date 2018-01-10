@@ -3,7 +3,7 @@ import { resetBoard, moveSquare } from "../actions";
 import React from "react";
 import Square from "../components/Square.jsx";
 import Swipeable from "react-swipeable";
-import { canMove, checkWin, formatTime } from "../lib/game";
+import { canMove, checkSuccess, formatTime } from "../lib/game";
 
 const countStyle = {
   fontSize: "36px",
@@ -41,14 +41,14 @@ class Board extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!this.state.success && checkWin(this.props.squares)) {
+    if (!this.state.success && checkSuccess(this.props.squares)) {
       this.setState({ success: true });
       this.pauseTimer();
     }
   }
 
   componentWillMount() {
-    if (checkWin(this.props.squares)) {
+    if (checkSuccess(this.props.squares)) {
       // 防治随机产生的顺序已是正解，打乱一次
       this.props.resetBoard();
     }
